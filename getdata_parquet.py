@@ -4,7 +4,8 @@ import tempfile
 import os
 
 # Load mô hình Whisper
-model = whisper.load_model("base")
+from transformers import pipeline
+transcriber = pipeline("automatic-speech-recognition", model="vinai/PhoWhisper-small")
 
 # Đọc file .parquet
 df = pd.read_parquet("train-00000-of-00001.parquet")
@@ -29,7 +30,7 @@ for idx, row in df.iterrows():
             continue
 
         # ✅ Chỉ định tiếng Việt ở đây
-        result = model.transcribe(tmp_file_path, language="vi")
+        result = transcribe(tmp_file_path)
         transcript = result['text']
         print(f"[{idx}] 🇻🇳 Transcript: {transcript[:50]}...")
 
